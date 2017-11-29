@@ -19,10 +19,9 @@ def score(game):
         last = get_value(game[i])
         if not first_roll:
             frame += 1
-        if first_roll is True:
-            first_roll = False
-        else:
             first_roll = True
+        else:
+            first_roll = False
         if game[i] == 'X' or game[i] == 'x':
             first_roll = True
             frame += 1
