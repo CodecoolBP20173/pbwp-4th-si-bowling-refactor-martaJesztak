@@ -1,7 +1,7 @@
 def score(game):
     result = 0
     frame = 1
-    in_first_half = True
+    first_roll = True
     for i in range(len(game)):
         if game[i] == '/':
             result += 10 - last
@@ -17,14 +17,14 @@ def score(game):
                 else:
                     result += get_value(game[i + 2])
         last = get_value(game[i])
-        if not in_first_half:
+        if not first_roll:
             frame += 1
-        if in_first_half is True:
-            in_first_half = False
+        if first_roll is True:
+            first_roll = False
         else:
-            in_first_half = True
+            first_roll = True
         if game[i] == 'X' or game[i] == 'x':
-            in_first_half = True
+            first_roll = True
             frame += 1
     return result
 
