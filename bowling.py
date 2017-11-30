@@ -1,4 +1,10 @@
 def score(game):
+    """ Given a valid sequence of rolls for one line of American Ten-Pin Bowling 
+    this function calculates the total score for the game.
+
+    Args: list
+    Returns: result (int)
+    """
     result = 0
     frame = 1
     first_roll = True
@@ -72,5 +78,3 @@ def get_value(char):
         return 0
     else:
         raise ValueError()
-
-score("1/35XXX458/X3/XX6")
