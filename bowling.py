@@ -5,35 +5,60 @@ def score(game):
     for roll in range(len(game)):
         if frame < 10:
             if game[roll] == '/':
-                result = add_spare_result(result, roll, game, last)
+                result = add_spare_points_to_total(result, roll, game)
             elif game[roll] == 'X' or game[roll] == 'x':
-                result = add_strike_result(result, roll, game)
+                result = add_strike_points_to_total(result, roll, game)
             else:
                 result += get_value(game[roll])
-                last = get_value(game[roll])
         else:
             result += get_value(game[roll])
-        if not first_roll:
-            frame += 1
-            first_roll = True
+        frame = frame_check(frame, first_roll, game, roll)
+        first_roll = is_next_first_roll(first_roll, game, roll)
+    return result
+
+def calculate_result(game, roll, frame, last_game_roll, result):
+    if frame < 10:
+        if game[roll] == '/':
+            result = add_spare_points_to_total(result, roll, game, last_game_roll)
+        elif game[roll] == 'X' or game[roll] == 'x':
+            result = add_strike_points_to_total(result, roll, game)
         else:
-            first_roll = False
-        if game[roll] == 'X' or game[roll] == 'x':
-            first_roll = True
+            result += get_value(game[roll])
+            last_game_roll = get_value(game[roll])
+    else:
+        result += get_value(game[roll])
+
+def is_next_first_roll(first_roll, game, roll):
+    if not first_roll:
+        is_next_first_roll = True
+    else:
+        if game[roll] != 'X' or game[roll] != 'x':
+            is_next_first_roll = False
+    return is_next_first_roll
+
+
+def frame_check(frame, first_roll, game, roll):
+    if not first_roll:
             frame += 1
+    else:
+        if game[roll] == 'X' or game[roll] == 'x':
+            frame += 1
+    return frame
+
+
+def add_spare_points_to_total(result, roll, game):
+    result += get_value(game[roll]) - get_value(game[roll-1]) + get_value(game[roll + 1])
     return result
 
-def add_spare_result(result, roll, game, last):
-    result += get_value(game[roll]) - last + get_value(game[roll + 1])
-    return result
 
-def add_strike_result(result, roll, game):
+def add_strike_points_to_total(result, roll, game):
     result += get_value(game[roll]) + get_value(game[roll + 1])
     if game[roll + 2] == '/':
         result += get_value(game[roll]) - get_value(game[roll + 1])
     else:
         result += get_value(game[roll + 2])
     return result
+
 
 def get_value(char):
     if char == '1' or char == '2' or char == '3' or \
@@ -49,4 +74,4 @@ def get_value(char):
     else:
         raise ValueError()
 
-score("------------------X2/")
+score("1/35XXX458/X3/XX6")
