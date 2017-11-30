@@ -4,29 +4,28 @@ def score(game):
     first_roll = True
     for roll in range(len(game)):
         if frame < 10:
-            if game[roll] == '/':
-                result = add_spare_points_to_total(result, roll, game)
-            elif game[roll] == 'X' or game[roll] == 'x':
-                result = add_strike_points_to_total(result, roll, game)
-            else:
-                result += get_value(game[roll])
+            result = calculate_normal_game_result(game, roll, result)
         else:
-            result += get_value(game[roll])
+            result = calculate_bonus_game_result(game, roll, result)
         frame = frame_check(frame, first_roll, game, roll)
         first_roll = is_next_first_roll(first_roll, game, roll)
     return result
 
-def calculate_result(game, roll, frame, last_game_roll, result):
-    if frame < 10:
-        if game[roll] == '/':
-            result = add_spare_points_to_total(result, roll, game, last_game_roll)
-        elif game[roll] == 'X' or game[roll] == 'x':
-            result = add_strike_points_to_total(result, roll, game)
-        else:
-            result += get_value(game[roll])
-            last_game_roll = get_value(game[roll])
+
+def calculate_normal_game_result(game, roll, result):
+    if game[roll] == '/':
+        result = add_spare_points_to_total(result, roll, game)
+    elif game[roll] == 'X' or game[roll] == 'x':
+        result = add_strike_points_to_total(result, roll, game)
     else:
         result += get_value(game[roll])
+    return result
+
+
+def calculate_bonus_game_result(game, roll, result):
+    result += get_value(game[roll])
+    return result
+
 
 def is_next_first_roll(first_roll, game, roll):
     if not first_roll:
